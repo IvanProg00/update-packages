@@ -9,7 +9,7 @@ import (
 // Run ...
 func Run() error {
 	if err := UpgradePackages(); err != nil {
-		return validateerrors.ValidateErrors(err, stages.UpgradePackages)
+		return validateerrors.Snap(err, stages.UpgradePackages)
 	}
 
 	return nil

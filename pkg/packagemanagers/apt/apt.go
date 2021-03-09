@@ -9,11 +9,11 @@ import (
 // Run ...
 func Run() error {
 	if err := Update(); err != nil {
-		return validateerrors.ValidateErrors(err, stages.FundUpdates)
+		return validateerrors.Apt(err, stages.SearchUpdates)
 	}
 
 	if err := UpgradePackages(); err != nil {
-		return validateerrors.ValidateErrors(err, stages.UpgradePackages)
+		return validateerrors.Apt(err, stages.UpgradePackages)
 	}
 
 	return nil

@@ -9,4 +9,6 @@ const (
 	NPM = "NPM"
 	// Yarn ...
 	Yarn = "Yarn"
+	// PIP ...
+	PIP = "PIP"
 )

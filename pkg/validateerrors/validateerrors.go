@@ -7,11 +7,49 @@ const (
 	PermissionDenied = "Permission denied"
 )
 
-// ValidateErrors ...
-func ValidateErrors(err error, posError string) error {
+// Apt ...
+func Apt(err error, posError string) error {
 	errStr := err.Error()
-	if err.Error() == "exit status 1" || err.Error() == "exit status 100" || err.Error() == "exit status 243" {
+	if errStr == "exit status 100" {
 		errStr = PermissionDenied
 	}
-	return fmt.Errorf("%s [%s]", errStr, posError)
+	return CustomError(errStr, posError)
+}
+
+// Snap ...
+func Snap(err error, posError string) error {
+	errStr := err.Error()
+	if errStr == "exit status 1" {
+		errStr = PermissionDenied
+	}
+	return CustomError(errStr, posError)
+}
+
+// NPM ...
+func NPM(err error, posError string) error {
+	errStr := err.Error()
+	if errStr == "exit status 243" {
+		errStr = PermissionDenied
+	}
+	return CustomError(errStr, posError)
+}
+
+// Yarn ...
+func Yarn(err error, posError string) error {
+	errStr := err.Error()
+	return CustomError(errStr, posError)
+}
+
+// PIP ...
+func PIP(err error, posError string) error {
+	errStr := err.Error()
+	if errStr == "exit status 1" {
+		errStr = PermissionDenied
+	}
+	return CustomError(errStr, posError)
+}
+
+// CustomError ...
+func CustomError(err, posError string) error {
+	return fmt.Errorf("%s [%s]", err, posError)
 }

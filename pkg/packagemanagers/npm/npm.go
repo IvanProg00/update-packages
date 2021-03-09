@@ -1,4 +1,4 @@
-package yarn
+package npm
 
 import (
 	"os/exec"
@@ -9,7 +9,7 @@ import (
 // Run ...
 func Run() error {
 	if err := UpgradePackages(); err != nil {
-		return validateerrors.ValidateErrors(err, stages.UpgradePackages)
+		return validateerrors.NPM(err, stages.UpgradePackages)
 	}
 
 	return nil
@@ -17,5 +17,5 @@ func Run() error {
 
 // UpgradePackages ...
 func UpgradePackages() error {
-	return exec.Command("yarn", "global", "upgrade").Run()
+	return exec.Command("npm", "-g", "upgrade").Run()
 }

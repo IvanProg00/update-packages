@@ -4,12 +4,13 @@ import (
 	"fmt"
 	"sync"
 	"time"
-	"update-packages/pkg/apt"
-	"update-packages/pkg/npm"
-	"update-packages/pkg/snap"
+	"update-packages/pkg/packagemanagers/apt"
+	"update-packages/pkg/packagemanagers/npm"
+	"update-packages/pkg/packagemanagers/pip"
+	"update-packages/pkg/packagemanagers/snap"
+	"update-packages/pkg/packagemanagers/yarn"
 	"update-packages/pkg/stages"
 	"update-packages/pkg/vars"
-	"update-packages/pkg/yarn"
 )
 
 var (
@@ -24,13 +25,15 @@ func Run() {
 	var wg sync.WaitGroup
 
 	wg.Add(1)
-	UpdateApt(&wg)
+	go UpdateApt(&wg)
 	wg.Add(1)
-	UpdateSnap(&wg)
+	go UpdateSnap(&wg)
 	wg.Add(1)
-	UpdateNPM(&wg)
+	go UpdateNPM(&wg)
 	wg.Add(1)
-	UpdateYarn(&wg)
+	go UpdateYarn(&wg)
+	wg.Add(1)
+	go UpdatePip(&wg)
 
 	wg.Wait()
 
@@ -83,6 +86,16 @@ func UpdateYarn(wg *sync.WaitGroup) {
 		return
 	}
 	fmt.Println(CustomSuccess(vars.Yarn))
+}
+
+// UpdatePip ...
+func UpdatePip(wg *sync.WaitGroup) {
+	defer wg.Done()
+	if err := pip.Run(); err != nil {
+		errorsList = append(errorsList, CustomError(err, vars.PIP))
+		return
+	}
+	fmt.Println(CustomSuccess(vars.PIP))
 }
 
 // CustomError ...
