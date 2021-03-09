@@ -34,17 +34,15 @@ func Run() {
 
 	wg.Wait()
 
-	if len(successList) > 0 {
-		ShowSuccess(successList)
-	}
 	if len(errorsList) > 0 {
 		ShowErrors(errorsList)
 	} else {
-		fmt.Println("Packages Updated Successfully")
+		fmt.Println("All Packages Updated Successfully")
 	}
 
 	endTime := time.Now().UnixNano()
-	fmt.Println(endTime - startTime)
+	duration := float64(time.Duration(endTime-startTime)) / float64(time.Second)
+	fmt.Printf("App finished in %f seconds\n", duration)
 }
 
 // UpdateApt ...
@@ -54,7 +52,7 @@ func UpdateApt(wg *sync.WaitGroup) {
 		errorsList = append(errorsList, CustomError(err, vars.APT))
 		return
 	}
-	successList = append(successList, CustomSuccess(vars.APT))
+	fmt.Println(CustomSuccess(vars.APT))
 }
 
 // UpdateSnap ...
@@ -64,7 +62,7 @@ func UpdateSnap(wg *sync.WaitGroup) {
 		errorsList = append(errorsList, CustomError(err, vars.Snap))
 		return
 	}
-	successList = append(successList, CustomSuccess(vars.Snap))
+	fmt.Println(CustomSuccess(vars.Snap))
 }
 
 // UpdateNPM ...
@@ -74,7 +72,7 @@ func UpdateNPM(wg *sync.WaitGroup) {
 		errorsList = append(errorsList, CustomError(err, vars.NPM))
 		return
 	}
-	successList = append(successList, CustomSuccess(vars.NPM))
+	fmt.Println(CustomSuccess(vars.NPM))
 }
 
 // UpdateYarn ...
@@ -84,7 +82,7 @@ func UpdateYarn(wg *sync.WaitGroup) {
 		errorsList = append(errorsList, CustomError(err, vars.Yarn))
 		return
 	}
-	successList = append(successList, CustomSuccess(vars.Yarn))
+	fmt.Println(CustomSuccess(vars.Yarn))
 }
 
 // CustomError ...
@@ -101,12 +99,5 @@ func CustomSuccess(packageManager string) string {
 func ShowErrors(errs []error) {
 	for _, err := range errorsList {
 		fmt.Println(err)
-	}
-}
-
-// ShowSuccess ...
-func ShowSuccess(listSuccess []string) {
-	for _, mess := range listSuccess {
-		fmt.Println(mess)
 	}
 }
